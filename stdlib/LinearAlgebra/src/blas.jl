@@ -141,7 +141,7 @@ function check()
     config = get_config()
 
     # Ensure that one of our loaded libraries satisfies our interface requirement
-    interface = Base.USE_BLAS64 ? :ilp64 : lp64
+    interface = Base.USE_BLAS64 ? :ilp64 : :lp64
     if !any(lib.interface == interface for lib in config.loaded_libs)
         interfacestr = uppercase(string(interface))
         @error("No loaded BLAS libraries were built with $(interfacestr) support")
