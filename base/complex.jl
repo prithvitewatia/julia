@@ -263,6 +263,20 @@ julia> conj(1 + 3im)
 conj(z::Complex) = Complex(real(z),-imag(z))
 abs(z::Complex)  = hypot(real(z), imag(z))
 abs2(z::Complex) = real(z)*real(z) + imag(z)*imag(z)
+
+"""
+    mod(z::Complex,n::Real)
+Returns a complex number whose real part and imaginary parts are old real part modulo n and old imaginary part modulo n respectively.
+# Examples
+```jldoctest
+julia> mod(12+10im,5)
+2 + 0im
+julia> mod(3+11im,7)
+3 + 4im
+```
+"""
+mod(z::Complex,n::Real)=Complex(mod(real(z),n),mod(imag(z),n))
+
 function inv(z::Complex)
     c, d = reim(z)
     (isinf(c) | isinf(d)) && return complex(copysign(zero(c), c), flipsign(-zero(d), d))
