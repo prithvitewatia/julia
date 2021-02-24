@@ -1207,6 +1207,15 @@ end
     @test isapprox(mod(Complex(101.793,205.468),1),Complex(0.793,0.468))
     @test isapprox(mod(Complex(123.47,139.98),10),Complex(3.47,9.98))
     @test isapprox(mod(Complex(259.89,321.12),16),Complex(3.89,1.12))
+    #Teting on maximum and minimum values of Int32, Int64
+    int_min32=typemin(Int32)
+    int_max32=typemax(Int32)
+    int_min64=typemin(Int64)
+    int_max64=typemax(Int64)
+    @test isequal(mod(Complex(-1,-7),int_min32),Complex(-1,-7))
+    @test isequal(mod(Complex(11,13),int_max32),Complex(11,13))
+    @test isequal(mod(Complex(-15,-16),int_min64),Complex(-15,-16))
+    @test isequal(mod(Complex(9,0),int_max64),Complex(9,0))
 end
 
 @testset "issue #29840" begin
