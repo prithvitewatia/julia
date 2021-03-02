@@ -1188,25 +1188,18 @@ end
     @test tanh(atanh(complex(-1.0,-1.0))) == complex(-1.0,-1.0)
 end
 
-@testset "mod, issue #37376" begin
+@testset "issue #37376" begin
+    #Tests for complex mod function============================================
     #Testing on zeros and ones
-    @test isequal(mod(0+0im,1),Complex(0,0))
-    @test isequal(mod(Complex(0,0),2),Complex(0,0))
-    @test isequal(mod(Complex(1,0),1),Complex(0,0))
-    @test isequal(mod(Complex(0,1),1),Complex(0,0))
-    @test isequal(mod(Complex(1,1),1),Complex(0,0))
+    for (z,n) in ((0+0im,1),(0+0im,2),(1+0im,1),(0+1im,1),(1+1im,1))
+        @test mod(z,n)===0 + 0im
+    end
     #Testing on integer numerator and denominator
-    @test isequal(mod(Complex(5,6),2),Complex(1,0))
     @test isequal(mod(Complex(11,17),7),Complex(4,3))
-    @test isequal(mod(Complex(10,12),5),Complex(0,2))
     #Testing for non integer values
     #Using isapprox function because floating-point numbers are not infinitely precise
-    @test isapprox(mod(Complex(11.3,7.9),3),Complex(2.3,1.9))    #Prime numbers 3 and 7
-    @test isapprox(mod(Complex(21.4,11.7),7),Complex(0.4,4.7))
-    @test isapprox(mod(Complex(16.8,17.5),2),Complex(0.8,1.5))   #Even Prime number
-    @test isapprox(mod(Complex(101.793,205.468),1),Complex(0.793,0.468))
-    @test isapprox(mod(Complex(123.47,139.98),10),Complex(3.47,9.98))
-    @test isapprox(mod(Complex(259.89,321.12),16),Complex(3.89,1.12))
+    @test isapprox(mod(Complex(11.3,7.9),3),Complex(2.3,1.9))    #Even and odd numbers 3 and 2
+    @test isapprox(mod(Complex(21.4,11.7),2),Complex(1.4,1.7))
     #Teting on maximum and minimum values of Int32, Int64
     int_min32=typemin(Int32)
     int_max32=typemax(Int32)
@@ -1216,6 +1209,30 @@ end
     @test isequal(mod(Complex(11,13),int_max32),Complex(11,13))
     @test isequal(mod(Complex(-15,-16),int_min64),Complex(-15,-16))
     @test isequal(mod(Complex(9,0),int_max64),Complex(9,0))
+    #Tests for complex div and rem functions=====================================
+    #Testing div and rem individually. The following tests are for div
+    #Testing on zeros
+    @test isequal(div(Complex(0,0),1),Complex(0,0))
+    @test isequal(div(Complex(0,0),2),Complex(0,0))
+    @test isequal(div(Complex(1,0),1),Complex(1,0))
+    @test isequal(div(Complex(0,1),1),Complex(0,1))
+    @test isequal(div(Complex(1,1),1),Complex(1,1))
+    #Testing on integers
+    @test  isequal(div(Complex(11,21),7),Complex(1,3))
+    #Testing on non integer values
+    @test isapprox(div(Complex(7.856,9.123),3),Complex(2.0,3.0))
+    # Testing rem function
+    for (z,n) in ((0+0im,1),(0+0im,2),(1+0im,1),(0+1im,1),(1+1im,1))
+        @test mod(z,n)===0 + 0im
+    end
+    # Testing on integer values
+    # Checking that the sign of output is same as that of dividend
+    @test isequal(rem(Complex(2,3),-5),Complex(2,3))
+    # Testing on floating point values
+    @test isapprox(rem(Complex(3.77,4.12),-7),Complex(3.77,4.12))
+    # Testing property that x=div(x,y)*y + rem(x,y)
+    # x= 12 + 15im y=5
+    @test Complex(12,15)===div(Complex(12,15),5)*5 + rem(Complex(12,15),5)
 end
 
 @testset "issue #29840" begin
