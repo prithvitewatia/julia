@@ -137,8 +137,6 @@ if is_primary_base_module
 
     Ref(x::Ref, i::Integer) = (i != 1 && error("Ref only has one element"); x)
     Ref(x::Ptr{T}, i::Integer) where {T} = x + (i - 1) * Core.sizeof(T)
-    #For multidimensional-arrays
-    Ref(x::AbstractArray{T},row::Integer,column::Integer) where {T} = Ref(x,row+(column-1)*size(x)[1])
 
     # convert Arrays to pointer arrays for ccall
     function Ref{P}(a::Array{<:Union{Ptr,Cwstring,Cstring}}) where P<:Union{Ptr,Cwstring,Cstring}
